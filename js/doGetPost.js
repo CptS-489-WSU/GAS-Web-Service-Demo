@@ -13,7 +13,25 @@
 */
 
 function doGetPost(e) {
-  //TO DO: Write code                                   
+  var courseObj;
+  if (e.parameter.name && e.parameter.city && e.parameter.state && e.parameter.country) {
+    //Process GET request to add new course
+    courseObj = {id: "", name: e.parameter.name, city: e.parameter.city, state: e.parameter.state,
+                 country: e.parameter.country};
+    if (!courseExists(courseObj)) {
+      courseObj.id = generateCourseId(courseObj); //generate unique ID
+      addCourse(courseObj); //add course to DB
+      if (e.parameter.callback) { //need to return using callback
+         return ContentService.createTextOutput(e.parameter.callback + '(' + JSON.stringify(courseObj) + ')')
+            .setMimeType(ContentService.MimeType.JAVASCRIPT);
+      } else { //dont' return using callback
+        return ContentService.createTextOutput(JSON.stringify(courseObj))
+            .setMimeType(ContentService.MimeType.JAVASCRIPT);
+
+      }
+    }
+  }  
+  //If here, it's not a GET request to add a new course. Test for other types of requests.                                 
 }
 
 
