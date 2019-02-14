@@ -16,12 +16,12 @@ function addCourse(course) {
   //Set up cell formattig
   timeFormat = "[m]:ss";
   numFormat = "##";
-  formats = [numFormat,timeFormat,numFormat,numFormat,numFormat,timeFormat,numFormat,numFormat,
-             numFormat,timeFormat,numFormat,numFormat,numFormat,timeFormat,numFormat,numFormat]
+  formats = [[numFormat,timeFormat,numFormat,numFormat,numFormat,timeFormat,numFormat,numFormat,
+             numFormat,timeFormat,numFormat,numFormat,numFormat,timeFormat,numFormat,numFormat]];
   //Add course to database
   sheet.appendRow([course.id,course.city,
                    course.state,course.country,totalStrParFormula,totalTimeParFormula,
                   totalGolfDistFormula, totalRunDistFormula]);
   //set cell formatting
-  sheet.getRange(newRowNum,7,16,1).setNumberFormats(formats); //set proper cell formatting.
+  sheet.getRange(newRowNum,7,1,16).setNumberFormats(formats); //set proper cell formatting.
 }

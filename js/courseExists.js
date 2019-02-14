@@ -14,8 +14,7 @@ function courseExists(course) {
         courses[i][2] == course.state && courses[i][3] == course.country) {
           //Exact match!
           return true;
-        }
-      }
+    }
   }
   return false; 
 }
