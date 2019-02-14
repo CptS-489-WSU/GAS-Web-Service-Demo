@@ -1,6 +1,6 @@
 //getCourseRow -- Given a course Id, this function returns the (0-based) row at which the course's data resides, or -1
 //if the playerId could not be found in the database.
-function getPlayerRow(playerId) {
+function getCourseRow(courseId) {
   var sheet, courseIds;
   sheet = SpreadsheetApp.getActiveSheet();
   courseIds = sheet.getSheetValues(2,1,sheet.getLastRow()-2,1); //entire column of courseIds

@@ -19,8 +19,8 @@ function addCourse(course) {
   formats = [[numFormat,timeFormat,numFormat,numFormat,numFormat,timeFormat,numFormat,numFormat,
              numFormat,timeFormat,numFormat,numFormat,numFormat,timeFormat,numFormat,numFormat]];
   //Add course to database
-  sheet.appendRow([course.id,course.city,
-                   course.state,course.country,totalStrParFormula,totalTimeParFormula,
+  sheet.appendRow([course.id,course.name, course.city,
+                   course.state,course.country,course.numHoles,totalStrParFormula,totalTimeParFormula,
                   totalGolfDistFormula, totalRunDistFormula]);
   //set cell formatting
   sheet.getRange(newRowNum,7,1,16).setNumberFormats(formats); //set proper cell formatting.

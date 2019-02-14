@@ -18,7 +18,7 @@ function doGetPost(e) {
   if (e.parameter.name && e.parameter.city && e.parameter.state && e.parameter.country && e.parameter.numHoles) {
     //Process GET request to add new course
     courseObj = {id: "", name: e.parameter.name, city: e.parameter.city, state: e.parameter.state,
-                 country: e.parameter.country};
+                 country: e.parameter.country, numHoles: e.parameter.numHoles};
     returnObj = {id: "", name: e.parameter.name, courseAdded: true};
     if (!courseExists(courseObj)) {
       courseObj.id = returnObj.id = generateCourseId(courseObj); //generate unique ID
@@ -27,14 +27,26 @@ function doGetPost(e) {
       returnObj.courseAdded = false;
     }
     if (e.parameter.callback) { //need to return using callback
-       return ContentService.createTextOutput(e.parameter.callback + '(' + JSON.stringify(courseObj) + ')')
+       return ContentService.createTextOutput(e.parameter.callback + '(' + JSON.stringify(returnObj) + ')')
             .setMimeType(ContentService.MimeType.JAVASCRIPT);
     } else { //dont' return using callback
         return ContentService.createTextOutput(JSON.stringify(courseObj))
             .setMimeType(ContentService.MimeType.JAVASCRIPT);
     }  
   }  
-  //If here, it's not a GET request to add a new course. Test for other types of requests.                                 
+  if (e.parameter.id) { //Request to retrieve data associated with course
+    returnObj = getCourseData(e.parameter.id);
+    if (e.parameter.callback) { //need to return using callback
+      return ContentService.createTextOutput(e.parameter.callback + 
+              '(' + JSON.stringify(returnObj) + ')')
+           .setMimeType(ContentService.MimeType.JAVASCRIPT);
+     } else { //dont' return using callback
+       return ContentService.createTextOutput(JSON.stringify(courseObj))
+           .setMimeType(ContentService.MimeType.JAVASCRIPT);
+     }  
+  }
+
+  }                               
 }
 
 
