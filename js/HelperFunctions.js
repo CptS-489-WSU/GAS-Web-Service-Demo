@@ -3,7 +3,7 @@
 function getCourseRow(courseId) {
   var sheet, courseIds;
   sheet = SpreadsheetApp.getActiveSheet();
-  courseIds = sheet.getSheetValues(2,1,sheet.getLastRow()-2,1); //entire column of courseIds
+  courseIds = sheet.getSheetValues(2,1,sheet.getLastRow()-1,1); //entire column of courseIds
   for (var i = 0; i < courseIds.length; ++i) { //search for the playerId
     if (courseIds[i][0] === courseId) { //match
       return i + 1; //compensates for the header row

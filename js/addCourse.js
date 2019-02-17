@@ -6,11 +6,11 @@ function addCourse(course) {
   newRowNum = sheet.getLastRow() + 1; //get new row where course will be added
   //Set up formulas
   totalStrParFormula = "=SUM(K?, O?, S?)"; 
-  totalTimeParForula = "=SUM(L?, P?, T?)";
+  totalTimeParFormula = "=SUM(L?, P?, T?)";
   totalGolfDistFormula = "=SUM(M?,Q?,U?)";
   totalRunDistFormula = "=SUM(M?,R?,V?)";
   totalStrParFormula = totalStrParFormula.replace(/\?/g,newRowNum);
-  totalTimeParFormula = totalStrParFormula.replace(/\?/g,newRowNum);
+  totalTimeParFormula = totalTimeParFormula.replace(/\?/g,newRowNum);
   totalGolfDistFormula = totalGolfDistFormula.replace(/\?/g,newRowNum);
   totalRunDistFormula = totalRunDistFormula.replace(/\?/g,newRowNum);
   //Set up cell formattig

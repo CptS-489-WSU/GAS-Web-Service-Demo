@@ -15,8 +15,9 @@
 function doGetPost(e) {
   var courseObj, returnObj;
   console.log("in doGetPost with parameters = " + JSON.stringify(e.parameter));
-  if (e.parameter.name && e.parameter.city && e.parameter.state && e.parameter.country && e.parameter.numHoles) {
-    //Process GET request to add new course
+  if (e.parameter.name && e.parameter.city && 
+      e.parameter.state && e.parameter.country 
+      && e.parameter.numHoles) { //Process GET request to add new course
     courseObj = {id: "", name: e.parameter.name, city: e.parameter.city, state: e.parameter.state,
                  country: e.parameter.country, numHoles: e.parameter.numHoles};
     returnObj = {id: "", name: e.parameter.name, courseAdded: true};
@@ -34,7 +35,7 @@ function doGetPost(e) {
             .setMimeType(ContentService.MimeType.JAVASCRIPT);
     }  
   }  
-  if (e.parameter.id) { //Request to retrieve data associated with course
+  if (e.parameter.id) { //GET request to retrieve data associated with course
     returnObj = getCourseData(e.parameter.id);
     if (e.parameter.callback) { //need to return using callback
       return ContentService.createTextOutput(e.parameter.callback + 
@@ -45,9 +46,11 @@ function doGetPost(e) {
            .setMimeType(ContentService.MimeType.JAVASCRIPT);
      }  
   }
+  //if here, unrecognized query params
+  return ContentService.createTextOutput("Error: Unrecognized query parameters: " + JSON.stringify(e.parameter))
+           .setMimeType(ContentService.MimeType.JAVASCRIPT);
+}                               
 
-  }                               
-}
 
 
 //doGet -- forward GET requests to doGetPost (see above)
@@ -57,5 +60,11 @@ function doGet(e) {
 
 //doPost -- forward POST requests to doGetPost (see above)
 function doPost(e) {
-  return doGetPost(e);
+  console.log("e.postData.type = " + e.postData.type);
+  console.log("e.postData.contents = " + JSON.stringify(e.postData.contents));
+  var courseObj = JSON.parse(e.postData.contents);
+  var returnVal = updateCourse(courseObj);
+  console.log("updateCourse returned " + returnVal + ", returning result to client...");
+  return ContentService.createTextOutput(returnVal)
+           .setMimeType(ContentService.MimeType.JAVASCRIPT); 
 }
