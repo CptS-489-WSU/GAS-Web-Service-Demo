@@ -3,15 +3,19 @@
 //the course DB as a JSON
 //object.
 function getCourseData(courseId) {
-    var holeNum, i, sheet, courseRow, courseVals, headerVals, courseData;
+    var holeNum, i, sheet, courseRow, courseVals, headerVals, courseData, lock;
+    lock = LockService.getDocumentLock();
+    lock.waitLock(30000); //lock auto times out after 30 seconds
     courseRow = getCourseRow(courseId);
     if (courseRow == -1) {
+        lock.releaseLock();
         return "error: Course with ID " + courseId +
                "does not exist.";
     }
     sheet = SpreadsheetApp.getActiveSheet();
     courseVals = sheet.getSheetValues(courseRow+1,2,1,22);
     headerVals = sheet.getSheetValues(1,2,1,22);
+    lock.releaseLock(); //we're done accessing sheet
     courseData = {}; //Initialize empty object to add to
     //Save basic course data to object
     courseData.name = courseVals[0][0];

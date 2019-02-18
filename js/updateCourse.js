@@ -3,7 +3,7 @@
 function updateCourse(courseObj) {
     console.log("in updateCourse with courseObj = " + JSON.stringify(courseObj));
     var validTimePar = new RegExp("[0-5]?[0-9][:][0-5][0-9]");
-    var sheet, courseRow, courseValRange, courseVals;
+    var sheet, courseRow, courseValRange, courseVals, lock;
     if (isNaN(courseObj.holeNum) || courseObj.holeNum < 0 || courseObj.holeNum > 18) {
       return "Error: invalid hole number: " + courseObj.holeNum; //invalid hole number
     }
@@ -14,6 +14,8 @@ function updateCourse(courseObj) {
       return "Error: invalid time par: " + courseObj.timePar; //invalid holePar
     }
     //If here, we have valid data to write to the database!
+    lock = LockService.getDocumentLock();
+    lock.waitLock(30000);
     sheet = SpreadsheetApp.getActiveSheet();
     courseRow = getCourseRow(courseObj.id);
     if (courseRow == -1) {
@@ -27,5 +29,6 @@ function updateCourse(courseObj) {
     courseVals[0][2] = courseObj.golfDist;
     courseVals[0][3] = courseObj.runDist;
     courseValRange.setValues(courseVals); //write to DB
+    lock.releaseLock(); //We're done accessing sheet.
     return "Success";
 } 
