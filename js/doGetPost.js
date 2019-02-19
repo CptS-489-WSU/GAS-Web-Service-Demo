@@ -1,18 +1,14 @@
-/* doGetPost -- This function handles both GET and POST requests for the CptS 489 Speedgolf Course Webservices API Example.
-   It assumes that both GET and POST requests pass all data in query params. In practice, POST request can also pass data
-   in a body, but for now we will not consider that possibility. The API process three types of requests:
+/* doGet -- This function handles GET requests for the CptS 489 Speedgolf Course Webservices API Example.
    
    1. (GET) Given a course name, city, state, and country, attempt to add the course to the database. Return a a JSON object
    of the following form {name: <course name>, id: <unique course id>. courseAdded: boolean}
    
    2. (GET) Given a course id, retrieve all of the data associated with the course as a JSON object with the following fields
       (only fields for which non-empty data exists are included: Name, City, State, Country, NumHoles, TotalStrPar, TotalTimePar,
-      TotalGolfDist, TotalRunDist, 1: {StrPar, TimePar,RunDist,GolfDist}...
-      
-   3. (POST) Given a course id and the data for a particular hole (1 through numHoles), update the course with the hole data.
+      TotalGolfDist, TotalRunDist, 1: {StrPar, TimePar,RunDist,GolfDist}...   
 */
 
-function doGetPost(e) {
+function doGet(e) {
   var courseObj, returnObj;
   console.log("in doGetPost with parameters = " + JSON.stringify(e.parameter));
   if (e.parameter.name && e.parameter.city && 
@@ -31,7 +27,7 @@ function doGetPost(e) {
        return ContentService.createTextOutput(e.parameter.callback + '(' + JSON.stringify(returnObj) + ')')
             .setMimeType(ContentService.MimeType.JAVASCRIPT);
     } else { //dont' return using callback
-        return ContentService.createTextOutput(JSON.stringify(courseObj))
+        return ContentService.createTextOutput(JSON.stringify(returnObj))
             .setMimeType(ContentService.MimeType.JAVASCRIPT);
     }  
   }  
@@ -42,7 +38,7 @@ function doGetPost(e) {
               '(' + JSON.stringify(returnObj) + ')')
            .setMimeType(ContentService.MimeType.JAVASCRIPT);
      } else { //dont' return using callback
-       return ContentService.createTextOutput(JSON.stringify(courseObj))
+       return ContentService.createTextOutput(JSON.stringify(returnObj))
            .setMimeType(ContentService.MimeType.JAVASCRIPT);
      }  
   }
@@ -53,12 +49,11 @@ function doGetPost(e) {
 
 
 
-//doGet -- forward GET requests to doGetPost (see above)
-function doGet(e) {
-  return doGetPost(e);
-}
-
-//doPost -- forward POST requests to doGetPost (see above)
+/* doPost -- Handle the post request to update course hole data. We grab the updated
+   hole data from the POST body, call upon updateCourse, and then return the value
+   returned from updateCourse, which is a status message indicating whether data
+   could be updated.
+*/
 function doPost(e) {
   console.log("e.postData.type = " + e.postData.type);
   console.log("e.postData.contents = " + JSON.stringify(e.postData.contents));

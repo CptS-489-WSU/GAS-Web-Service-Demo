@@ -14,8 +14,10 @@ function updateCourse(courseObj) {
       return "Error: invalid time par: " + courseObj.timePar; //invalid holePar
     }
     //If here, we have valid data to write to the database!
-    lock = LockService.getDocumentLock();
-    lock.waitLock(30000);
+    lock = LockService.getDocumentLock(); /* get a lock to the doc to avoid 
+                                             concurrency issues */
+    lock.waitLock(30000);  //Lock auto-expires after 30 seconds
+
     sheet = SpreadsheetApp.getActiveSheet();
     courseRow = getCourseRow(courseObj.id);
     if (courseRow == -1) {
@@ -29,6 +31,6 @@ function updateCourse(courseObj) {
     courseVals[0][2] = courseObj.golfDist;
     courseVals[0][3] = courseObj.runDist;
     courseValRange.setValues(courseVals); //write to DB
-    lock.releaseLock(); //We're done accessing sheet.
+    lock.releaseLock(); //We're done accessing sheet so explicitly release lock
     return "Success";
 } 
